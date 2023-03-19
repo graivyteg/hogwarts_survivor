@@ -136,8 +136,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e5fb0faba974a20b3f6161f1f41339a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  maxHealth: 100
   moveSpeed: 3
   rotationSpeed: 120
+  isPoolable: 1
 --- !u!1 &4738881491501709741
 GameObject:
   m_ObjectHideFlags: 0

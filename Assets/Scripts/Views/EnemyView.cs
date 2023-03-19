@@ -7,7 +7,7 @@ namespace HogwartsSurvivor.Views
 {
     [RequireComponent(typeof(NavMeshAgent))]
     [RequireComponent(typeof(Animator))]
-    public class EnemyMovementView : MonoBehaviour
+    public class EnemyView : MonoBehaviour
     {
         [SerializeField] private float moveSpeed = 3;
         [SerializeField] private float rotationSpeed = 120;
@@ -29,7 +29,7 @@ namespace HogwartsSurvivor.Views
             var entry = EntryPoint.GetInstance();
             entry.SubscribeOnBaseControllersInit(() =>
             {
-                entry.GetController<EnemyMovementController>().AddView(this);
+                entry.GetController<EnemyController>().AddView(this);
             });
         }
     }

@@ -5,22 +5,22 @@ using UnityEngine;
 
 namespace HogwartsSurvivor.Controllers.Enemy
 {
-    public class EnemyMovementController : BaseController
+    public class EnemyController : BaseController
     {
         public override bool HasUpdate => true;
 
-        private List<EnemyMovementView> views;
+        private List<EnemyView> views;
         private Transform target;
         
         private readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
 
-        public EnemyMovementController(GamePlayerView playerView)
+        public EnemyController(GamePlayerView playerView)
         {
-            views = new List<EnemyMovementView>();
+            views = new List<EnemyView>();
             target = playerView.transform;
         }
         
-        public void AddView(EnemyMovementView view)
+        public void AddView(EnemyView view)
         {
             views.Add(view);
         }
@@ -36,7 +36,7 @@ namespace HogwartsSurvivor.Controllers.Enemy
             }
         }
 
-        private void UpdateAnimations(EnemyMovementView view)
+        private void UpdateAnimations(EnemyView view)
         {
             view.Animator.SetFloat(moveSpeedHash, view.Agent.velocity.magnitude / view.MoveSpeed);
         }
