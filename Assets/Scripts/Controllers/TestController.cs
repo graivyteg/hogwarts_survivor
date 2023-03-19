@@ -18,8 +18,8 @@ namespace HogwartsSurvivor.Controllers
         {
             if (Input.GetKeyDown(KeyCode.Space))
             {
-                var obj = entry.GetController<PoolController>().Get("enemy");
-                obj.transform.position = Vector3.up;
+                var player = EntryPoint.GetInstance().MonoPlayerView.Data;
+                entry.GetController<GamePlayerController>().DealDamage(10);
             }
         }
     }

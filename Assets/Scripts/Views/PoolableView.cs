@@ -8,7 +8,7 @@ namespace HogwartsSurvivor.Views
     public class PoolableView : MonoBehaviour
     {
         private PoolableData _data;
-        
+
         public void InitData(PoolableData data)
         {
             if (_data != null)
@@ -20,5 +20,7 @@ namespace HogwartsSurvivor.Views
         }
         
         public PoolableData GetData() => _data;
+        
+        
     }
 }

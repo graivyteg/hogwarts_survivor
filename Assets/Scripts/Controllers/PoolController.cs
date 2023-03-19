@@ -10,6 +10,9 @@ namespace HogwartsSurvivor.Controllers
     {
         private Dictionary<string, PoolData> pools;
 
+        public event Action<PoolableView> OnTakenFromPool;
+        public event Action<PoolableView> OnReturnedToPool; 
+
         public PoolController()
         {
             pools = new Dictionary<string, PoolData>();
@@ -28,12 +31,15 @@ namespace HogwartsSurvivor.Controllers
 
         public PoolableView Get(string key)
         {
-            return pools[key].Get();
+            var view = pools[key].Get();
+            OnTakenFromPool?.Invoke(view);
+            return view;
         }
 
         public void ReturnToPool(PoolableView view)
         {
             pools[view.GetData().Key].Return(view);
+            OnReturnedToPool?.Invoke(view);   
         }
     }
 }

@@ -43,7 +43,7 @@ namespace HogwartsSurvivor.Models
 
             var obj = availableObjects.Dequeue();
             obj.gameObject.SetActive(true);
-            
+
             return obj;
         }
 

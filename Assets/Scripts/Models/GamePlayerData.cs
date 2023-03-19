@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HogwartsSurvivor.Models
 {
-    public class GamePlayerData : BaseModel<GamePlayerView>
+    public class GamePlayerData : DamageableModel<GamePlayerView>
     {
         public Vector3 PlayerPosition => CachedTransform.position;
         public bool IsCarryingItem => storageData.StorageCount > 0;

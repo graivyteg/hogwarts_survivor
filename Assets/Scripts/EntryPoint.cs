@@ -1,5 +1,4 @@
 using HogwartsSurvivor.Controllers;
-using HogwartsSurvivor.Controllers.Enemy;
 using HogwartsSurvivor.Utils;
 using HogwartsSurvivor.Views;
 using OLS_HyperCasual;
@@ -36,7 +35,7 @@ namespace HogwartsSurvivor
             AddController(new FollowingCameraController(MonoCameraView, MonoPlayerView));
             AddController(new PoolController());
             AddController(new SpawnerController());
-            AddController(new EnemyMovementController(MonoPlayerView));
+            AddController(new EnemyController(MonoPlayerView));
             AddController(new TestController());
             base.InitControllers();
         }

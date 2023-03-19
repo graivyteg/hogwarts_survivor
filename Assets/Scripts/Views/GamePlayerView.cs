@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace HogwartsSurvivor.Views
 {
-    public class GamePlayerView : MonoBehaviour
+    public class GamePlayerView : DamageableView
     {
         [SerializeField] private float moveSpeed = 6;
         [SerializeField] private float rotationSpeed = 6;

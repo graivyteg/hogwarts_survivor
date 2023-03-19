@@ -27,6 +27,9 @@ namespace HogwartsSurvivor.Controllers
             playerTransform = playerView.transform;
             playerRigidbody = playerView.Rigidbody;
             playerAnimator = playerView.Animator;
+
+            PlayerData.OnDamaged += OnDamaged;
+            PlayerData.OnKilled += OnKilled;
         }
 
         public override void FixedUpdate(float dt)
@@ -51,6 +54,26 @@ namespace HogwartsSurvivor.Controllers
         private void UpdateAnimation(float normalizedSpeed)
         {
             playerAnimator.SetFloat(MoveSpeed, normalizedSpeed);
+        }
+
+        public void DealDamage(float damage)
+        {
+            PlayerData.ApplyDamage(damage);
+        }
+
+        public void Kill(GamePlayerData model)
+        {
+            PlayerData.Kill();
+        }
+        
+        private void OnDamaged(object sender, float damage)
+        {
+            Debug.Log("Ay suka bolno");
+        }
+        
+        private void OnKilled(object sender)
+        {
+            Debug.Log("Vse pizdec");
         }
     }
 }
