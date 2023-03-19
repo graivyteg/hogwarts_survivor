@@ -3,12 +3,12 @@ using UnityEngine.EventSystems;
 
 namespace HogwartsSurvivor.Utils
 {
-    public class GameJoystick : Joystick
+    public class Joystick : FloatingJoystick
     {
         protected override void Start()
         {
             base.Start();
-            EntryPoint.GetInstance().Joystick = this;
+            EntryPoint.GetInstance().FloatingJoystick = this;
             background.gameObject.SetActive(false);
         }
 
