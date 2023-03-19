@@ -8,6 +8,7 @@ namespace HogwartsSurvivor.Models
         public Vector3 PlayerPosition => CachedTransform.position;
         public bool IsCarryingItem => storageData.StorageCount > 0;
         public Transform CachedTransform { get; private set; }
+        
         public bool IsMoving { get; set; }
 
         private StorageData storageData { get; }
