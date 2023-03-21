@@ -14,6 +14,10 @@ namespace HogwartsSurvivor.Views
         [SerializeField] private float moveSpeed = 3;
         [SerializeField] private float rotationSpeed = 120;
 
+        [Header("Additional")]
+        [SerializeField] private float deathDelay = 3;
+        [SerializeField] private float damagedDelay = 0.5f; 
+
         private NavMeshAgent agent;
         private Animator animator;
         private PoolableView poolableView;
@@ -22,14 +26,17 @@ namespace HogwartsSurvivor.Views
         public Animator Animator => animator;
         public float MoveSpeed => moveSpeed;
         public float RotationSpeed => rotationSpeed;
-        
+
+        public float DeathDelay => deathDelay;
+        public float DamagedDelay => damagedDelay;
+
         public PoolableView PoolableView => poolableView;
-        
+
         private void Start()
         {
             agent = GetComponent<NavMeshAgent>();
             animator = GetComponent<Animator>();
-            
+
             TryGetComponent<PoolableView>(out poolableView);
             
             var entry = EntryPoint.GetInstance();

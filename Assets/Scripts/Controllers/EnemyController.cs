@@ -6,33 +6,34 @@ using UnityEngine;
 
 namespace HogwartsSurvivor.Controllers
 {
-    public class EnemyController : BaseController
+    public class EnemyController : BaseMonoController<EnemyView, EnemyData>
     {
         public override bool HasUpdate => true;
-
-        private List<EnemyData> enemies;
+        
         private Transform target;
 
         private PoolController poolController;
+        private TimeController timeController;
         
-        private readonly int moveSpeedHash = Animator.StringToHash("MoveSpeed");
-
-        public EnemyController(GamePlayerView playerView)
+        public EnemyController(GamePlayerView playerView) 
         {
-            enemies = new List<EnemyData>();
             target = playerView.transform;
 
-            poolController = EntryPoint.GetInstance().GetController<PoolController>();
+            var entry = EntryPoint.GetInstance();
+            poolController = entry.GetController<PoolController>();
+            timeController = entry.GetController<TimeController>();
         }
         
-        public void AddView(EnemyView view)
+        public override EnemyData AddView(EnemyView view)
         {
             var enemy = new EnemyData(view);
             enemy.OnDamaged += OnDamaged;
             enemy.OnKilled += OnKilled;
-            
+
             TrySubscribePoolableEvents(enemy);
-            enemies.Add(enemy);
+            modelsList.Add(enemy);
+            
+            return enemy;
         }
 
         private bool TrySubscribePoolableEvents(EnemyData enemy)
@@ -52,22 +53,19 @@ namespace HogwartsSurvivor.Controllers
 
         public override void Update(float dt)
         {
-            foreach (var enemy in enemies)
+            foreach (var enemy in modelsList)
             {
                 var view = enemy.View;
-                view.Agent.speed = view.MoveSpeed;
-                view.Agent.angularSpeed = view.RotationSpeed;
                 view.Agent.destination = target.transform.position;
-                UpdateAnimations(view);
+                view.Animator.SetFloat("MoveSpeed", view.Agent.velocity.magnitude / view.MoveSpeed);
             }
         }
 
-        public void KillRandom()
+        public EnemyData GetRandom()
         {
-            var enemy = enemies[0];
-            Kill(enemy);
+            return modelsList[Random.Range(0, modelsList.Count)];
         }
-        
+
         public void DealDamage(EnemyData model, float damage)
         {
             model.ApplyDamage(damage);
@@ -80,35 +78,42 @@ namespace HogwartsSurvivor.Controllers
 
         protected virtual void OnTakenFromPool(EnemyData enemy)
         {
-            enemies.Add(enemy);
-            enemy.RestoreHealth();
+            modelsList.Add(enemy);
+            enemy.Reset();
         }
 
         protected virtual void OnReturnedToPool(EnemyData enemy) { }
 
         protected virtual void OnDamaged(object sender, float damage)
         {
-            Debug.Log("AY BLYA");
+            var enemy = (EnemyData)sender;
+            enemy.View.Animator.SetTrigger("OnDamaged");
+            
+            enemy.StopMoving();
+            timeController.SetTimeout(enemy.DamagedDelay, () =>
+            {
+                if (enemy.IsAlive) enemy.ContinueMoving();
+            });
         }
 
         protected virtual void OnKilled(object sender)
         {
-            var enemy = (EnemyData)sender;
-            enemies.Remove(enemy);
+            var enemy = (EnemyData) sender;
+            enemy.View.Animator.SetTrigger("OnKilled");
+            enemy.StopMoving();
+
+            RemoveModel(enemy);
             
-            if (!enemy.IsPoolable)
+            timeController.SetTimeout(enemy.DeathDelay, () =>
             {
-                Object.Destroy(enemy.View.gameObject);
-                return;
-            }
-            
-            var pool = EntryPoint.GetInstance().GetController<PoolController>();
-            pool.ReturnToPool(enemy.PoolableView);
-        }
-        
-        protected virtual void UpdateAnimations(EnemyView view)
-        {
-            view.Animator.SetFloat(moveSpeedHash, view.Agent.velocity.magnitude / view.MoveSpeed);
+                if (!enemy.IsPoolable)
+                {
+                    Object.Destroy(enemy.View.gameObject);
+                    return;
+                }
+                
+                poolController.ReturnToPool(enemy.PoolableView); 
+            });
         }
     }
 }

@@ -20,7 +20,5 @@ namespace HogwartsSurvivor.Views
         }
         
         public PoolableData GetData() => _data;
-        
-        
     }
 }

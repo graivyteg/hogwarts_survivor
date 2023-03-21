@@ -10,7 +10,7 @@ namespace HogwartsSurvivor.Views
 
         private void Start()
         {
-            EntryPoint.GetInstance().MonoCameraView = this;
+            EntryPoint.GetNewInstance().MonoCameraView = this;
         }
     }
 }

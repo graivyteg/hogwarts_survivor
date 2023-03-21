@@ -8,7 +8,7 @@ namespace HogwartsSurvivor
 {
     public class EntryPoint : BaseEntryPoint
     {
-        private static EntryPoint instance;
+        private static EntryPoint newInstance;
         
         public GamePlayerView MonoPlayerView { get; set; }
         public FollowingCameraView MonoCameraView { get; set; }
@@ -17,13 +17,14 @@ namespace HogwartsSurvivor
         private new void Awake()
         {
             instance = this;
+            newInstance = this;
         }
 
-        public new static EntryPoint GetInstance()
+        public static EntryPoint GetNewInstance()
         {
-            return instance;
+            return newInstance;
         }
-        
+
         protected override bool IsAllInited()
         {
             return MonoPlayerView != null && MonoCameraView != null && Joystick != null;
@@ -31,11 +32,17 @@ namespace HogwartsSurvivor
 
         protected override void InitControllers()
         {
+            AddController(new SaveController());
+            AddController(new ResourcesController());
+            AddController(new TimeController());
+            AddController(new SpellController());
+            AddController(new SpellCasterController());
             AddController(new GamePlayerController(MonoPlayerView, Joystick));
             AddController(new FollowingCameraController(MonoCameraView, MonoPlayerView));
             AddController(new PoolController());
             AddController(new SpawnerController());
             AddController(new EnemyController(MonoPlayerView));
+            AddController(new HealthBarController(MonoCameraView));
             AddController(new TestController());
             base.InitControllers();
         }

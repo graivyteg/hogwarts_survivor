@@ -3,31 +3,31 @@ using HogwartsSurvivor.Utils;
 using HogwartsSurvivor.Views;
 using OLS_HyperCasual;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace HogwartsSurvivor.Controllers
 {
     public class GamePlayerController : BaseController
     {
         public override bool HasFixedUpdate => true;
-
         public GamePlayerData PlayerData { get; private set; }
-
-        private GamePlayerView playerView;
+        
         private GameJoystick joystick;
-        private Transform playerTransform;
         private Animator playerAnimator;
         private Rigidbody playerRigidbody;
-        private static readonly int MoveSpeed = Animator.StringToHash("MoveSpeed");
+
+        private TimeController timeController;
 
         public GamePlayerController(GamePlayerView playerView, GameJoystick joystick)
         {
-            this.playerView = playerView;
-            PlayerData = new GamePlayerData(playerView);
+            timeController = EntryPoint.GetInstance().GetController<TimeController>();
+            
             this.joystick = joystick;
-            playerTransform = playerView.transform;
-            playerRigidbody = playerView.Rigidbody;
+            
             playerAnimator = playerView.Animator;
-
+            playerRigidbody = playerView.Rigidbody;
+            
+            PlayerData = new GamePlayerData(playerView);
             PlayerData.OnDamaged += OnDamaged;
             PlayerData.OnKilled += OnKilled;
         }
@@ -39,21 +39,15 @@ namespace HogwartsSurvivor.Controllers
             var moveDirection = new Vector3(dir.x, 0, dir.y);
             var gravity = new Vector3(0, playerRigidbody.velocity.y, 0);
             
-            playerRigidbody.velocity = moveDirection * playerView.MoveSpeed + gravity;
+            playerRigidbody.velocity = moveDirection * PlayerData.MoveSpeed + gravity;
 
             if (moveDirection != Vector3.zero)
             {
                 var rotDirection = Quaternion.LookRotation(moveDirection);
-                playerRigidbody.rotation = Quaternion.Slerp(playerRigidbody.rotation, rotDirection, playerView.RotationSpeed * dt);
+                playerRigidbody.rotation = Quaternion.Slerp(playerRigidbody.rotation, rotDirection, PlayerData.RotationSpeed * dt);
             }
 
-            UpdateAnimation(moveDirection.magnitude);
-            PlayerData.IsMoving = true;
-        }
-
-        private void UpdateAnimation(float normalizedSpeed)
-        {
-            playerAnimator.SetFloat(MoveSpeed, normalizedSpeed);
+            playerAnimator.SetFloat("MoveSpeed", moveDirection.magnitude);
         }
 
         public void DealDamage(float damage)
@@ -61,19 +55,26 @@ namespace HogwartsSurvivor.Controllers
             PlayerData.ApplyDamage(damage);
         }
 
-        public void Kill(GamePlayerData model)
+        public void Kill()
         {
             PlayerData.Kill();
         }
         
         private void OnDamaged(object sender, float damage)
         {
-            Debug.Log("Ay suka bolno");
+            playerAnimator.SetTrigger("OnDamaged");
+            
+            PlayerData.StopMoving();
+            timeController.SetTimeout(PlayerData.DamagedDelay, () =>
+            {
+                PlayerData.ContinueMoving();
+            });
         }
         
         private void OnKilled(object sender)
         {
-            Debug.Log("Vse pizdec");
+            playerAnimator.SetTrigger("OnKilled");
+            PlayerData.StopMoving();
         }
     }
 }

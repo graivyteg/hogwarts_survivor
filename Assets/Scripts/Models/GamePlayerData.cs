@@ -4,13 +4,19 @@ using UnityEngine;
 
 namespace HogwartsSurvivor.Models
 {
-    public class GamePlayerData : DamageableModel<GamePlayerView>
+    public class GamePlayerData : DamageableData<GamePlayerView>
     {
         public Vector3 PlayerPosition => CachedTransform.position;
         public bool IsCarryingItem => storageData.StorageCount > 0;
         public Transform CachedTransform { get; private set; }
         
-        public bool IsMoving { get; set; }
+        public float MoveSpeed { get; private set; }
+        public float RotationSpeed { get; private set; }
+
+        private float maxSpeed;
+        private float maxRotationSpeed;
+
+        public readonly float DamagedDelay;
 
         private StorageData storageData { get; }
 
@@ -20,6 +26,12 @@ namespace HogwartsSurvivor.Models
             storageData = new StorageData("PlayerData", 100);
             CachedTransform = view.transform;
             view.InitData(this);
+
+            MoveSpeed = view.MoveSpeed;
+            RotationSpeed = view.RotationSpeed;
+            maxSpeed = view.MoveSpeed;
+            maxRotationSpeed = view.RotationSpeed;
+            DamagedDelay = view.DamagedDelay;
         }
         
         public T GetItemFromStorage<T>() where T : StorageItem
@@ -27,6 +39,18 @@ namespace HogwartsSurvivor.Models
             var item = storageData.storageItems[^1] as T;
             item.UpdateStorage(null);
             return item;
+        }
+
+        public void StopMoving()
+        {
+            MoveSpeed = 0;
+            RotationSpeed = 0;
+        }
+
+        public void ContinueMoving()
+        {
+            MoveSpeed = maxSpeed;
+            RotationSpeed = maxRotationSpeed;
         }
     }
 }

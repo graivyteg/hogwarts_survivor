@@ -8,7 +8,7 @@ namespace HogwartsSurvivor.Utils
         protected override void Start()
         {
             base.Start();
-            EntryPoint.GetInstance().Joystick = this;
+            EntryPoint.GetNewInstance().Joystick = this;
             background.gameObject.SetActive(false);
         }
 
