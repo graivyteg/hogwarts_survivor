@@ -10,27 +10,27 @@ namespace HogwartsSurvivor.Controllers
     {
         public override bool HasUpdate => true;
 
-        private List<SpawnerData> spawners;
+        private List<SpawnerModel> spawnerModels;
         private PoolController poolController;
         
         public SpawnerController()
         {
-            spawners = new List<SpawnerData>();
-            poolController = EntryPoint.GetInstance().GetController<PoolController>();
+            spawnerModels = new List<SpawnerModel>();
+            poolController = BaseEntryPoint.GetInstance().GetController<PoolController>();
         }
 
         public void AddView(SpawnerView view)
         {
-            var data = new SpawnerData(view);
+            var data = view.InitializeModel();
             data.OnCooldown += Spawn;
-            spawners.Add(data);
+            spawnerModels.Add(data);
         }
 
         public override void Update(float dt)
         {
-            foreach (var spawner in spawners)
+            foreach (var spawner in spawnerModels)
             {
-                spawner.RemoveCooldown(dt);
+                spawner.UpdateCooldown(dt);
             }
         }
 

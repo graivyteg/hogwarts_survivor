@@ -10,9 +10,8 @@ namespace HogwartsSurvivor.Models
     public class PoolData : BaseModel<PoolView>
     {
         public readonly string Key;
-        private PoolableView prefab;
-        private readonly int startAmount;
         
+        private readonly PoolableView prefab;
         private Queue<PoolableView> availableObjects;
         private List<PoolableView> aliveObjects;
 
@@ -20,15 +19,12 @@ namespace HogwartsSurvivor.Models
         {
             Key = view.Key;
             prefab = view.Prefab;
-            startAmount = view.StartAmount;
             availableObjects = new Queue<PoolableView>();
             
-            Init();
-        }
-
-        public void Init()
-        {
-            for (var i = 0; i < startAmount; i++) Add();
+            for (var i = 0; i < view.StartAmount; i++)
+            {
+                Add();
+            }
         }
 
         public PoolableView Get()
