@@ -13,9 +13,8 @@ GameObject:
   - component: {fileID: 1360950182405220658}
   - component: {fileID: 8670981345559993902}
   - component: {fileID: 8670981345559993899}
-  - component: {fileID: 2004384152077658883}
-  - component: {fileID: 7598612696767705173}
-  - component: {fileID: -7975491500056478710}
+  - component: {fileID: 2683086235267701356}
+  - component: {fileID: -4951588918614309517}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Player
@@ -113,7 +112,7 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 2
---- !u!114 &2004384152077658883
+--- !u!114 &2683086235267701356
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -122,12 +121,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1236779692460505011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a0c2525eb8cc4a2c8c381d179f5eb891, type: 3}
+  m_Script: {fileID: 11500000, guid: e3468c5aa5dc4fdaa115cd670371c341, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _moveSpeed: 3
-  _rotationSpeed: 120
---- !u!114 &7598612696767705173
+--- !u!114 &-4951588918614309517
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -136,22 +133,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 1236779692460505011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2372fb0f8f104d2e8171880c371212a1, type: 3}
+  m_Script: {fileID: 11500000, guid: 6e5fb0faba974a20b3f6161f1f41339a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &-7975491500056478710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1236779692460505011}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7bc28620ea1644afb53a7efae8ea27c0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SpellPoint: {fileID: 3689987262620478149}
+  maxHealth: 100
+  moveSpeed: 3
+  rotationSpeed: 120
+  isPoolable: 1
 --- !u!1 &4738881491501709741
 GameObject:
   m_ObjectHideFlags: 0
